@@ -70,7 +70,7 @@ const MODEL_RATES = {
         const aiResponse = await fetch("https://openrouter.ai/api/v1/chat/completions", {
           method: "POST",
           headers: {
-            Authorization: `Bearer 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`, // ✅ Must be set in env
+            Authorization: `Bearer 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`, // ✅ Must be set in env
             "Content-Type": "application/json",
             "HTTP-Referer": "https://aikipedia.in/",
             "X-Title": "aikipedia",
