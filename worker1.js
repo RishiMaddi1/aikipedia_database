@@ -61,7 +61,8 @@ export default {
             method: "POST",
             headers: {
               "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhhZmp3bG5hY3diZ2h3amVpYndjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDYwODQ1MDcsImV4cCI6MjA2MTY2MDUwN30.mKJCQ2WR3YHSYRvOawjCeSVSv4OYIpV06OsSa1bJ6UA",
-              "Content-Type": "application/json"
+              "Content-Type": "application/json",
+              "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhhZmp3bG5hY3diZ2h3amVpYndjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDYwODQ1MDcsImV4cCI6MjA2MTY2MDUwN30.mKJCQ2WR3YHSYRvOawjCeSVSv4OYIpV06OsSa1bJ6UA"
             },
             body: JSON.stringify({ username })
           });
@@ -165,7 +166,8 @@ export default {
             method: "POST",
             headers: {
               "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhhZmp3bG5hY3diZ2h3amVpYndjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDYwODQ1MDcsImV4cCI6MjA2MTY2MDUwN30.mKJCQ2WR3YHSYRvOawjCeSVSv4OYIpV06OsSa1bJ6UA",
-              "Content-Type": "application/json"
+              "Content-Type": "application/json",
+              "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhhZmp3bG5hY3diZ2h3amVpYndjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDYwODQ1MDcsImV4cCI6MjA2MTY2MDUwN30.mKJCQ2WR3YHSYRvOawjCeSVSv4OYIpV06OsSa1bJ6UA"
             },
             body: JSON.stringify({ user_id: creditRes.id, amount: totalCost })
           });
