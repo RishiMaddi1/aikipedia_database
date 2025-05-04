@@ -66,7 +66,21 @@ export default {
             body: JSON.stringify({ username })
           });
       
-          const creditRes = await creditCheck.json();
+          let creditRes;
+          try {
+            creditRes = await creditCheck.json();
+          } catch (e) {
+            console.error('Error parsing credit check response:', e);
+            return new Response(JSON.stringify({ 
+              error: "Error checking credits",
+              details: e.message,
+              responseText: await creditCheck.text()
+            }), {
+              status: 500,
+              headers: corsHeaders,
+            });
+          }
+      
           const availableCredits = parseFloat(creditRes.money_left || 0);
       
           if (availableCredits < 5) {
@@ -78,6 +92,13 @@ export default {
       
           // Prepare messages for the model
           const modelConfig = AVAILABLE_MODELS[model];
+          if (!modelConfig) {
+            return new Response(JSON.stringify({ error: "Invalid model selected" }), {
+              status: 400,
+              headers: corsHeaders,
+            });
+          }
+      
           const systemPrompt = { role: "system", content: modelConfig.systemPrompt };
           const trimmedHistory = history.slice(-12);
           const messages = [systemPrompt, ...trimmedHistory, { role: "user", content: message }];
@@ -102,10 +123,26 @@ export default {
             }),
           });
       
-          const result = await aiResponse.json();
+          let result;
+          try {
+            result = await aiResponse.json();
+          } catch (e) {
+            console.error('Error parsing OpenRouter response:', e);
+            return new Response(JSON.stringify({ 
+              error: "Error getting AI response",
+              details: e.message,
+              responseText: await aiResponse.text()
+            }), {
+              status: 500,
+              headers: corsHeaders,
+            });
+          }
       
           if (!aiResponse.ok || result.error || !result.choices) {
-            return new Response(JSON.stringify({ error: result.error || "Invalid API response" }), {
+            return new Response(JSON.stringify({ 
+              error: result.error || "Invalid API response",
+              details: result
+            }), {
               status: 500,
               headers: corsHeaders,
             });
@@ -124,7 +161,7 @@ export default {
           if (totalCost > availableCredits) totalCost = availableCredits;
       
           // Deduct credits
-          await fetch(`${SUPABASE_EDGE_URL}/subtract_credits`, {
+          const deductResponse = await fetch(`${SUPABASE_EDGE_URL}/subtract_credits`, {
             method: "POST",
             headers: {
               "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhhZmp3bG5hY3diZ2h3amVpYndjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDYwODQ1MDcsImV4cCI6MjA2MTY2MDUwN30.mKJCQ2WR3YHSYRvOawjCeSVSv4OYIpV06OsSa1bJ6UA",
@@ -132,6 +169,21 @@ export default {
             },
             body: JSON.stringify({ user_id: creditRes.id, amount: totalCost })
           });
+      
+          let deductResult;
+          try {
+            deductResult = await deductResponse.json();
+          } catch (e) {
+            console.error('Error parsing deduct credits response:', e);
+            return new Response(JSON.stringify({ 
+              error: "Error deducting credits",
+              details: e.message,
+              responseText: await deductResponse.text()
+            }), {
+              status: 500,
+              headers: corsHeaders,
+            });
+          }
       
           // Return final response
           return new Response(JSON.stringify({
@@ -146,7 +198,12 @@ export default {
           });
       
         } catch (e) {
-          return new Response(JSON.stringify({ error: e.message || "Unexpected error" }), {
+          console.error('Unexpected error:', e);
+          return new Response(JSON.stringify({ 
+            error: "Unexpected error",
+            details: e.message,
+            stack: e.stack
+          }), {
             status: 500,
             headers: corsHeaders,
           });
@@ -212,4 +269,4 @@ export default {
       });
     }
   };
-
+   
