@@ -2,19 +2,18 @@ from flask import Flask, request, jsonify
 import psycopg2
 import os
 from decimal import Decimal
-from dotenv import load_dotenv
-
 
 app = Flask(__name__)
 
-# Read database credentials from environment variables
+# Replace these with your actual Supabase database credentials
 DB_CONFIG = {
-    "host": os.getenv("DB_HOST"),
-    "dbname": os.getenv("DB_NAME"),
-    "user": os.getenv("DB_USER"),
-    "password": os.getenv("DB_PASSWORD"),
-    "port": int(os.getenv("DB_PORT", 5432))
+    "host": "db.xafjwlnacwbghwjeibwc.supabase.co",
+    "dbname": "postgres",  # this is from the end of the URL
+    "user": "postgres",
+    "password": "N3p4MJeSYUit4Oae",  # replace [YOUR-PASSWORD] with actual password
+    "port": 5432
 }
+
 
 def get_db_connection():
     return psycopg2.connect(
@@ -143,10 +142,6 @@ def subtract_credits():
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-        
-@app.route('/', methods=['GET'])
-def health_check():
-    return jsonify({"status": "OK"}), 200
 
 if __name__ == '__main__':
     app.run(debug=True)
