@@ -84,13 +84,6 @@ export default {
       
           const availableCredits = parseFloat(creditRes.money_left || 0);
       
-          if (availableCredits < 5) {
-            return new Response(JSON.stringify({ error: "Insufficient credits (min ₹5 required)" }), {
-              status: 402,
-              headers: corsHeaders,
-            });
-          }
-      
           // Prepare messages for the model
           const modelConfig = AVAILABLE_MODELS[model];
           if (!modelConfig) {
