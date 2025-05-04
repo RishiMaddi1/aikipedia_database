@@ -143,6 +143,10 @@ def subtract_credits():
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+        
+@app.route('/', methods=['GET'])
+def health_check():
+    return jsonify({"status": "OK"}), 200
 
 if __name__ == '__main__':
     app.run(debug=True)
